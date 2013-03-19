@@ -7,6 +7,5 @@ gen/
 lint.xml
 
 # Eclipse project files
-.classpath
 .settings
 .checkstyle
