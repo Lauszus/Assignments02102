@@ -1,4 +1,4 @@
-package opgave2_Mandelbrot;
+package afleveringsopgave4.opgave2.Mads;
 
 public class Complex {
 	private double re;
