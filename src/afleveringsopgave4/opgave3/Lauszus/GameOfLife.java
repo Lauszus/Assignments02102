@@ -32,13 +32,14 @@ public class GameOfLife {
 				else if(liveNeighbours == 3)
 					newState[y][x] = 1;
 				else
-					newState[y][x] = getState(x, y);
+					newState[y][x] = state[y][x];
 			}
 		}
 		state = newState.clone();
 	}
 	
-	private int getState(int x, int y) {
+	public int getState(int x, int y) { // Return the state with y-coordinates starting at the bottom 
+		y = gridSize-1 - y;	
 		return state[y][x];		
 	}
 	
@@ -51,7 +52,7 @@ public class GameOfLife {
 				int corX = x+j;
 				
 				if(corX >= 0 && corY >= 0 && corX < gridSize && corY < gridSize && (corX != x || corY != y)) {
-					if(getState(corX,corY) == 1)
+					if(state[corY][corX] == 1)
 						liveNeighbours++;
 				}
 			}
@@ -63,7 +64,7 @@ public class GameOfLife {
 		String output = "";
 		for(int y = 0; y < gridSize; y++) {
 			for(int x = 0; x < gridSize; x++) {
-				output += getState(x,y) + " ";
+				output += state[y][x] + " ";
 			}
 			output += "\n";
 		}
