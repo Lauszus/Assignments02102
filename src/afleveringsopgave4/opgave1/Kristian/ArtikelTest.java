@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave1;
+package afleveringsopgave4.opgave1.Kristian;
 
 import java.util.ArrayList;
 import java.util.List;

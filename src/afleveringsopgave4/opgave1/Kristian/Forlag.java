@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave1;
+package afleveringsopgave4.opgave1.Kristian;
 
 public class Forlag {
 	String navn;
