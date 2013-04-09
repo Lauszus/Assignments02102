@@ -101,9 +101,8 @@ public class Mandelbrot {
 	}
 	
 	private static int[][] loadColors(String filename) throws FileNotFoundException {
-		int[][] colors = new int[MAX+1][3];		
-		File file = new File("src" + File.separator + "afleveringsopgave4" + File.separator + "Files" + File.separator + "mnd" + File.separator + filename);
-		Scanner fileScanner = new Scanner(file);
+		int[][] colors = new int[MAX+1][3];
+		Scanner fileScanner = new Scanner(new File("src" + File.separator + "afleveringsopgave4" + File.separator + "Files" + File.separator + "mnd" + File.separator + filename));
 		
 		for (int j = 0; j <= MAX; j++) {
 			for (int i = 0; i < 3; i++)
