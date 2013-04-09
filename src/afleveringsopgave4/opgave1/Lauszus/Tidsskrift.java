@@ -16,4 +16,16 @@ public class Tidsskrift {
 	public void setForlag(Forlag forlag) {
 		this.forlag = forlag;
 	}
+	
+	public String toString() {
+		String output = titel + ". ";
+		
+		if(issn != null)
+			output += "ISSN: " + issn + ". ";
+		
+		if(forlag != null)
+			output += forlag + ".";
+		
+		return output;
+	}
 }
