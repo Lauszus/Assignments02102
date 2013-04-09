@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave2.Kristian;
+package afleveringsopgave4.opgave2.Lauszus;
 
 import java.awt.Color;
 import java.util.Scanner;

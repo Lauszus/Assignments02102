@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave2.Kristian;
+package afleveringsopgave4.opgave2.Lauszus;
 
 public class TestComplex {
 
