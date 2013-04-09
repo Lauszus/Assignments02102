@@ -62,12 +62,11 @@ public class Mandelbrot {
 						StdDraw.setPenColor(new Color(color,255-color,color));
 					} else
 						StdDraw.setPenColor(new Color(colors[iterations][0],colors[iterations][1],colors[iterations][2]));
-					
-					StdDraw.point(j, i);
-				} else if (iterations == MAX) {
-					StdDraw.setPenColor(StdDraw.RED);						
-					StdDraw.point(j, i);
-				}
+				} else if (iterations == MAX)
+					StdDraw.setPenColor(Color.RED);
+				
+				StdDraw.point(j, i);
+				
 				if(drawPoints) {
 					StdDraw.setPenColor(StdDraw.BLACK);
 					StdDraw.setPenRadius(0.1/(double)g);
