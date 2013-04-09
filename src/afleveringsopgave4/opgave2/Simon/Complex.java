@@ -20,13 +20,13 @@ public class Complex {
 		this.re= z.re;
 		this.im = z.im;
 	}
-	public double getRe(Complex z){
+	public double getRe(){
 		return re;
 	}
-	public double getIm(Complex z){
+	public double getIm(){
 		return im;
 	}
-	public double abs(Complex z){
+	public double abs(){
 		return Math.sqrt(re*re + im*im);
 	}
 	public Complex plus(Complex other){
