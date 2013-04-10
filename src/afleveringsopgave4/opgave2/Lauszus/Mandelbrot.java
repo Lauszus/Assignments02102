@@ -18,25 +18,36 @@ public class Mandelbrot {
 	 * @throws FileNotFoundException
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		System.out.print("Please enter center coordinates\nx0: ");
-		x0 = scanner.nextDouble(); System.out.print("y0: ");
-		y0 = scanner.nextDouble();
+		System.out.print("Enter the real coordinate of the center: ");
+		x0 = consoleInputCheck(scanner);		
+		System.out.print("Enter the imaginary coordinate of the center: ");
+		y0 = consoleInputCheck(scanner);
 		
-		System.out.print("Now enter side length: ");
-		s = scanner.nextDouble();
+		System.out.print("Enter the length of the side: ");
+		s = consoleInputCheck(scanner);
+		
+		scanner.nextLine();
+		System.out.print("Enter the filename of the color-file (press enter to skip): ");
+		String filename = scanner.nextLine();
 
-		drawMandelbrot(false,true,"blues.mnd");
+		drawMandelbrot(false,true,filename);
 	}
 
-	private static void drawMandelbrot(boolean drawPoints, boolean drawColors, String filename) throws FileNotFoundException {
+	private static void drawMandelbrot(boolean drawPoints, boolean drawColors, String filename) {
 		StdDraw.setCanvasSize(700, 700); // Adjust the size of the window
-		StdDraw.setBorder(0.15); // We added this function ourself in order to adjust the border size
+		StdDraw.setBorder(0); // We added this function ourself in order to adjust the border size
 		StdDraw.setScale(0, g - 1); // Set size of the coordinate system
 		
 		
 		int[][] colors = new int[MAX+1][3];
-		if(drawColors && filename != null)
-			colors = loadColors(filename);
+		if(drawColors && filename != null && filename != "") {
+			try {
+				colors = loadColors(filename);
+			} catch (FileNotFoundException e) {
+				System.out.println("Using default colors");
+				filename = null;
+			}
+		}
 		
 		StdDraw.show(0);
 
@@ -80,10 +91,18 @@ public class Mandelbrot {
 		StdDraw.show(0);
 	}
 	
+	
+	private static double consoleInputCheck(Scanner scanner){
+		while(!scanner.hasNextDouble()){
+			scanner.next();
+			System.out.print("Invalid input! Try again: ");
+		}
+		return scanner.nextDouble();
+	}
+	
 	private static int[][] loadColors(String filename) throws FileNotFoundException {
-		int[][] colors = new int[MAX+1][3];		
-		File file = new File("src" + File.separator + "afleveringsopgave4" + File.separator + "Files" + File.separator + "mnd" + File.separator + filename);
-		Scanner fileScanner = new Scanner(file);
+		int[][] colors = new int[MAX+1][3];
+		Scanner fileScanner = new Scanner(new File("src" + File.separator + "afleveringsopgave4" + File.separator + "Files" + File.separator + "mnd" + File.separator + filename));
 		
 		for (int j = 0; j <= MAX; j++) {
 			for (int i = 0; i < 3; i++)

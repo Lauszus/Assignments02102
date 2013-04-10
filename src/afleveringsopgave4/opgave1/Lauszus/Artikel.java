@@ -27,13 +27,7 @@ public class Artikel {
 				System.out.print(" & ");
 		}
 		System.out.print(": \"" + titel + "\". ");
-		System.out.print(tidsskrift.titel + ". ");
-		
-		if(tidsskrift.issn != null)
-			System.out.print("ISSN: " + tidsskrift.issn + ". ");
-		
-		if(tidsskrift.forlag != null)
-			System.out.print(tidsskrift.forlag.navn + ", " + tidsskrift.forlag.sted + ".");
+		System.out.print(tidsskrift);
 		
 		if(!referenceliste.isEmpty()) {
 			System.out.print("\nReferenceliste: ");

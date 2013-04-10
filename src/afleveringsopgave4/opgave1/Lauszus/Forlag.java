@@ -13,4 +13,8 @@ public class Forlag {
 		this.navn = navn;
 		this.sted = sted;
 	}
+	
+	public String toString() {
+		return (navn + ", " + sted);
+	}
 }
