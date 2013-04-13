@@ -12,7 +12,7 @@ public class Complex {
 
 	public Complex(double re, double im){
 		this.re = re;
-		this.im= im;
+		this.im = im;
 
 	}
 
