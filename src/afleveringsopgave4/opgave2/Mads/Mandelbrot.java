@@ -1,4 +1,4 @@
-package Mads;
+package afleveringsopgave4.opgave2.Mads;
 
 import java.util.Scanner;
 import java.awt.*;
