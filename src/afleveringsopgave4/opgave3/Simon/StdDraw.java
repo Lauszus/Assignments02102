@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave2.Mads;
+package afleveringsopgave4.opgave3.Simon;
 
 /**************************************************************************
  *  Compilation:  javac StdDraw.java

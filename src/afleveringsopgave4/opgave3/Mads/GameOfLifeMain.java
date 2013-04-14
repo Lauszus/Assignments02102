@@ -1,12 +1,10 @@
 package afleveringsopgave4.opgave3.Mads;
 
-
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import opgave2_Mandelbrot.StdDraw;
+import afleveringsopgave4.opgave2.Mads.StdDraw;
 
 public class GameOfLifeMain {
 	
