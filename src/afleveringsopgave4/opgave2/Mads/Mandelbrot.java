@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave2.Mads;
+package opgave2_Mandelbrot;
 
 import java.util.Scanner;
 import java.awt.*;
@@ -12,22 +12,39 @@ public class Mandelbrot {
 	public static final int GRIDSIZE=768; //512 evt 768 eller 900 for større grid
 	public static final boolean CONSOLEINPUT=false;
 	
-	public static int MAX = 255; //255
+	private static double centerRe;
+	private static double centerIm;
+	private static double sidelength;
+	
+	private static double centerReMandel;
+	private static double centerImMandel;
+	private static double sidelengthMandel;
+	
+	private static boolean mandelbrot = true;
+	private static Complex juliaConstant;
+	
+	private static int[][] drawingData;
+	private static int maxIterations = 255;
+	private static Complex[][] complexGrid;
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		
+				
 		//Forslag til forbedringer:
+		
+		//Spørg brugeren om de vil starte op med konsol?
+		//"g" (GoTo)
+		
 		//Starter op med -0.5+0i som centrum og bredde på 2 og color=blues.mnd
 		//klik for centrer (eller zoom?)
 		//"+" zoomer ind og "-" zoomer ud
-		//"g" (Go) bringer en dialog frem hvor man kan skrive et koordinat centrum skal gå til
 		//"i" (Iterations) bringer en dialogboks frem hvor den spørger om antal iterations
 		//"j" (Julia) laver juliaset for centrum
 		//"c" (Color) spørger om navnet på color-filen
 		//"w" (Where? am I?) giver koordinaterne på centrum
-		double centerRe;
-		double centerIm;
-		double sidelength;
+		
+		
+		
+		
 		String filename="";
 		
 		if (CONSOLEINPUT){
@@ -49,27 +66,16 @@ public class Mandelbrot {
 			centerRe =-0.5;
 			centerIm=0;
 			sidelength=2;
+			
 		}
+		centerReMandel = centerRe;
+		centerImMandel =  centerIm;
+		sidelengthMandel = sidelength;
 		
 		
 		
-		initializeCanvas();
 		int[][] colors = loadColors(filename);
-		
-		Complex center = new Complex(centerRe,centerIm);
-		Complex[][] complexGrid=createComplexGrid(center, sidelength);
-		int[][] drawingData= getDrawingData(complexGrid);
-		drawMandelbrot(drawingData, colors);
-		
-		//"+" zoomer ind og "-" zoomer ud
-				//"g" (Go) bringer en dialog frem hvor man kan skrive et koordinat centrum skal gå til
-				//"i" (Iterations) bringer en dialogboks frem hvor den spørger om antal iterations
-				// ikke implementeret endnu "j" (Julia) laver juliaset for centrum
-				//"c" (Color) spørger om navnet på color-filen
-				//"w" (Where am I?) giver koordinaterne på centrum
-		
-	//	StdDraw.isKeyPressed('G') || StdDraw.isKeyPressed('I') || StdDraw.isKeyPressed('C')|| StdDraw.isKeyPressed('W')
-		
+		redrawAll(colors);
 		
 		
 		while(true) {
@@ -79,9 +85,19 @@ public class Mandelbrot {
 			if(StdDraw.mousePressed()){
 				int corX = (int)Math.round(StdDraw.mouseX()); // Read mouse position
 				int corY = (int)Math.round(StdDraw.mouseY());
-				centerRe = complexGrid[corX][corY].getRe();
-				centerIm = complexGrid[corX][corY].getIm();
-				mousepressed=true;
+				
+				if (corX >= 0 && corX < GRIDSIZE && corY >= 0 && corY < GRIDSIZE ){
+					System.out.println(corX);
+					System.out.println(corY);
+					centerRe = complexGrid[corX][corY].getRe();
+					centerIm = complexGrid[corX][corY].getIm();
+					mousepressed=true;
+				}
+				
+				
+				
+				
+				
 			}
 			
 			if (StdDraw.hasNextKeyTyped()){
@@ -90,56 +106,97 @@ public class Mandelbrot {
 			while(StdDraw.mousePressed() || StdDraw.hasNextKeyTyped()); // Wait for release
 			
 			
-			if (mousepressed){
-				center = new Complex(centerRe,centerIm);
-				complexGrid=createComplexGrid(center, sidelength);
-				initializeCanvas();
-				drawingData=getDrawingData(complexGrid);
-				drawMandelbrot(drawingData, colors);
-			}else if(key=='i'){
+			if (mousepressed){ //Sets a new center
+				redrawAll(colors); 
+			}else if(key=='i'){ //Prompts the user for a new number of iterations
 				int iterations=dialogInputIterations();
 				if (iterations!=0)
-					MAX=iterations;	
-			}else if(key=='w'){
+					maxIterations=iterations;
+				else
+					JOptionPane.showMessageDialog(null,"Input is not an integer.\n"+maxIterations+" iterations is used","Input is not an integer",JOptionPane.PLAIN_MESSAGE);
+				redrawAll(colors);
+			}else if(key=='w'){ //Tells the user the complex coordinates of the center of the drawing panel
 				JOptionPane.showMessageDialog(null,"Coordinates of the center is: \n"+complexGrid[GRIDSIZE/2][GRIDSIZE/2].toString(),"Center coordinates",JOptionPane.PLAIN_MESSAGE);
-			}else if (key=='c'){
+			}else if (key=='c'){ //Promts the user for a new name for a color file
 				colors=loadColors(dialogInputFilename());
 				drawMandelbrot(drawingData, colors);
-			}else if(key=='+'){
-				sidelength /= Math.sqrt(2);
-				center = new Complex(centerRe,centerIm);
-				complexGrid=createComplexGrid(center, sidelength);
-				initializeCanvas();
-				drawingData= getDrawingData(complexGrid);
-				drawMandelbrot(drawingData, colors);
-			}else if(key=='-'){
+			}else if(key=='+'){ //Zooms to double the current size
+				sidelength /= Math.sqrt(2);	
+				redrawAll(colors);
+			}else if(key=='-'){ //Zooms to half the current size
 				sidelength *= Math.sqrt(2);
-				center = new Complex(centerRe,centerIm);
-				complexGrid=createComplexGrid(center, sidelength);
-				initializeCanvas();
-				drawingData= getDrawingData(complexGrid);
-				drawMandelbrot(drawingData, colors);
+				redrawAll(colors);
+				
+			}else if(key=='j'){ //Draws the Juliaset corresponding to the coordinates of the center
+				if (mandelbrot){
+					juliaConstant = new Complex(centerRe , centerIm);
+					sidelengthMandel = sidelength;
+					centerReMandel = centerRe;
+					centerImMandel = centerIm;
+					mandelbrot = false;
+					
+					sidelength = 4;
+					centerRe = 0;
+					centerIm = 0;
+					redrawAll(colors);
+				}
+				
+				
+			} else if(key=='m'){ //Draws the Mandelbrot set
+				if(!mandelbrot){
+					sidelength = sidelengthMandel;
+					centerRe = centerReMandel;
+					centerIm = centerImMandel;
+					mandelbrot = true;
+					redrawAll(colors);
+				}
+			}else if(key=='h'){ //Draws the Mandelbrot set
+				JOptionPane.showMessageDialog(null,"Click mouse to set new center \nKeys: \n'i' - iterations - sets iterations\n'w' - where am I? - tells you the coordintes of the center\n'c' - colors - loads new color file \n'+' - zooms to double size\n'-' - zooms to half size \n'j' - draws the Julia set for the center \n'm' - draws the Mandelbrot set","Help",JOptionPane.PLAIN_MESSAGE);
 			}
+				
 		}
 			
 		
 	}
 	
+	
+	public static void redrawAll(int[][] colors){
+		initializeCanvas();
+		Complex center = new Complex(centerRe,centerIm);
+		complexGrid = createComplexGrid(center, sidelength);
+		drawingData = getDrawingData();
+		drawMandelbrot(drawingData, colors);
+	}
+	
 	public static int iterate(Complex z0) {
 		Complex z = new Complex(z0);
-		for (int i = 0; i < MAX; i++) {
-			if (z.abs() > 2.0) {
-				return i;
+		if (mandelbrot){
+			//Iterates the passed complex, z, after the formula z_next = z^2 +z0
+			for (int i = 0; i < maxIterations; i++) {
+				if (z.abs() > 2.0) {
+					return i;
+				}
+				z = z.times(z).plus(z0);
 			}
-			z = z.times(z).plus(z0);
+			return maxIterations;
+			
+		} else {
+			//Iterates the passed complex, z, after the formula z_next = z^2 + c
+			for (int i = 0; i < maxIterations; i++) {
+				if (z.abs() > 2.0) {
+					return i;
+				}
+				z = z.times(z).plus(juliaConstant);
+			}
+			return maxIterations;
 		}
-		return MAX;
+		
 	}
 	
 	public static double consoleInputCheck(Scanner console){
 		while(!console.hasNextDouble()){
 			console.next();
-			System.out.println("Invalid inut! Try again: ");
+			System.out.println("Invalid input! Try again: ");
 		}
 		return console.nextDouble();
 	}
@@ -158,12 +215,12 @@ public class Mandelbrot {
 		return cGrid;
 	}
 	
-	public static int[][] getDrawingData(Complex complexGrid[][]){
+	public static int[][] getDrawingData(){ //Complex complexGrid[][]
 		
 		int[][] drawingData = new int[GRIDSIZE][GRIDSIZE];
 		for (int i=0; i<GRIDSIZE; i++){
 			for (int j=0; j<GRIDSIZE; j++){
-				drawingData[i][j]=(int)(iterate(complexGrid[i][j])/((double)MAX/((double)COLORDEPTH-1)));
+				drawingData[i][j]=(int)(iterate(complexGrid[i][j])/((double)maxIterations/((double)COLORDEPTH-1)));
 			}
 		}
 		return drawingData;
@@ -210,11 +267,11 @@ public class Mandelbrot {
 	
 	private static int dialogInputIterations() {
 		JFrame parent = new JFrame();
-		String input= JOptionPane.showInputDialog(parent,"","Iterations",JOptionPane.OK_CANCEL_OPTION);
+		String input= JOptionPane.showInputDialog(parent,maxIterations+" iterations is currently used\nPlease type a new number of iterations","Iterations",JOptionPane.OK_CANCEL_OPTION);
 		input = input.replaceAll("[^(0-9)]", "");
-		if (input == null)
+		if (input.equals(null))
 			return 0;
-		if (input=="")
+		if (input.equals(""))
 			return 0;
 		return Integer.parseInt(input);
 	}
