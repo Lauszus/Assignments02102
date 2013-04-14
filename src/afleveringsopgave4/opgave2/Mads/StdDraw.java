@@ -1,8 +1,7 @@
-package afleveringsopgave4.opgave2.Mads;
+package Mads;
 
-/*************************************************************************
- 
-*  Compilation:  javac StdDraw.java
+/**************************************************************************
+ *  Compilation:  javac StdDraw.java
  *  Execution:    java StdDraw
  *
  *  Standard drawing library. This class provides a basic capability for
@@ -95,7 +94,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     private static boolean defer = false;
 
     // boundary of drawing canvas, 5% border
-    private static final double BORDER = 0.05;
+    private static double BORDER = 0.05;
     private static final double DEFAULT_XMIN = 0.0;
     private static final double DEFAULT_XMAX = 1.0;
     private static final double DEFAULT_YMIN = 0.0;
@@ -160,6 +159,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         width = w;
         height = h;
         init();
+    }
+    
+    public static void setBorder(double boarder) {
+    	BORDER = boarder;
     }
 
     // init
@@ -1070,34 +1073,4 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
             keysDown.remove(e.getKeyCode());
         }
     }
-
-
-
-
-    /**
-     * Test client.
-     */
-    public static void main(String[] args) {
-        StdDraw.square(.2, .8, .1);
-        StdDraw.filledSquare(.8, .8, .2);
-        StdDraw.circle(.8, .2, .2);
-
-        StdDraw.setPenColor(StdDraw.BOOK_RED);
-        StdDraw.setPenRadius(.02);
-        StdDraw.arc(.8, .2, .1, 200, 45);
-
-        // draw a blue diamond
-        StdDraw.setPenRadius();
-        StdDraw.setPenColor(StdDraw.BOOK_BLUE);
-        double[] x = { .1, .2, .3, .2 };
-        double[] y = { .2, .3, .2, .1 };
-        StdDraw.filledPolygon(x, y);
-
-        // text
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(0.2, 0.5, "black text");
-        StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.text(0.8, 0.8, "white text");
-    }
-
 }

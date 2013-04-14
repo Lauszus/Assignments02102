@@ -1,4 +1,4 @@
-package afleveringsopgave4.opgave2.Mads;
+package Mads;
 
 public class TestComplex {
 

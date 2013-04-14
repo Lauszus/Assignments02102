@@ -1,7 +1,5 @@
-package afleveringsopgave4.opgave2.Mads;
+package Mads;
 
-
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.awt.*;
 import java.io.*;
@@ -41,25 +39,9 @@ public class Mandelbrot {
 	 * @param args This String array is not used.
 	 * @throws FileNotFoundException called if the file is not found. Though it is tested if the file exists
 	 */
-	public static void main(String[] args) throws FileNotFoundException {
-				
-		//Forslag til forbedringer:
-		
-		//Spørg brugeren om de vil starte op med konsol?
-		
-		//Starter op med -0.5+0i som centrum og bredde på 2 og color=blues.mnd
-		//klik for centrer (eller zoom?)
-		//"+" zoomer ind og "-" zoomer ud
-		//"i" (Iterations) bringer en dialogboks frem hvor den spørger om antal iterations
-		//"j" (Julia) laver juliaset for centrum
-		//"c" (Color) spørger om navnet på color-filen
-		//"w" (Where? am I?) giver koordinaterne på centrum
-		
-		
-		
+	public static void main(String[] args) throws FileNotFoundException {	
 		
 		String filename="";
-		
 		
 		if (CONSOLEINPUT){
 			//This part is only to show that we have implemented console input.
@@ -82,8 +64,8 @@ public class Mandelbrot {
 			centerRe =-0.5;
 			centerIm=0;
 			sidelength=2;
-			
 		}
+
 		centerReMandel = centerRe;
 		centerImMandel =  centerIm;
 		sidelengthMandel = sidelength;
@@ -91,16 +73,16 @@ public class Mandelbrot {
 		int[][] colors = loadColors(filename);
 		redrawAll(colors);
 		
-		
+		//Entering endless while loop when the Mandelbrot set have been drawn the first time
 		while(true) {
 			char key = ' ';
 			boolean mousepressed=false;
-			while(!(StdDraw.mousePressed()|| StdDraw.hasNextKeyTyped() )); // Wait for button press
+			while(!(StdDraw.mousePressed()|| StdDraw.hasNextKeyTyped() )); // Wait for mouse or keyboard press
 			if(StdDraw.mousePressed()){
 				int corX = (int)Math.round(StdDraw.mouseX()); // Read mouse position
 				int corY = (int)Math.round(StdDraw.mouseY());
 				
-				if (corX >= 0 && corX < GRIDSIZE && corY >= 0 && corY < GRIDSIZE ){
+				if (corX >= 0 && corX < GRIDSIZE && corY >= 0 && corY < GRIDSIZE ){ 
 					centerRe = complexGrid[corX][corY].getRe();
 					centerIm = complexGrid[corX][corY].getIm();
 					mousepressed=true;
@@ -116,6 +98,7 @@ public class Mandelbrot {
 			
 			if (mousepressed){ //Sets a new center
 				redrawAll(colors); 
+
 			}else if(key=='i'){ //Prompts the user for a new number of iterations
 				int iterations=dialogInputIterations();
 				if (iterations!=0)
@@ -123,14 +106,18 @@ public class Mandelbrot {
 				else
 					JOptionPane.showMessageDialog(null,"Input is not an integer.\n"+maxIterations+" iterations is used","Input is not an integer",JOptionPane.WARNING_MESSAGE);
 				redrawAll(colors);
+
 			}else if(key=='w'){ //Tells the user the complex coordinates of the center of the drawing panel
 				JOptionPane.showMessageDialog(null,"Coordinates of the center is: \n"+complexGrid[GRIDSIZE/2][GRIDSIZE/2].toString(),"Center coordinates",JOptionPane.INFORMATION_MESSAGE);
+
 			}else if (key=='c'){ //Promts the user for a new name for a color file
 				colors=loadColors(dialogInputFilename());
 				drawMandelbrot(drawingData, colors);
+
 			}else if(key=='+'){ //Zooms to double the current size
 				sidelength /= Math.sqrt(2);	
 				redrawAll(colors);
+
 			}else if(key=='-'){ //Zooms to half the current size
 				sidelength *= Math.sqrt(2);
 				redrawAll(colors);
@@ -149,7 +136,6 @@ public class Mandelbrot {
 					redrawAll(colors);
 				}
 				
-				
 			} else if(key=='m'){ //Draws the Mandelbrot set
 				if(!mandelbrot){
 					sidelength = sidelengthMandel;
@@ -158,21 +144,24 @@ public class Mandelbrot {
 					mandelbrot = true;
 					redrawAll(colors);
 				}
-			}else if(key=='h'){ //Display help box
-				JOptionPane.showMessageDialog(null,"Click mouse to set new center \nKeys: \n'i' - iterations - sets iterations\n'w' - where am I? - tells you the coordintes of the center\n'c' - colors - loads new color file \n'g' - go to - Enter coordinates and zoom level to go to\n'+' - zooms to double size\n'-' - zooms to half size \n'j' - draws the Julia set for the center \n'm' - draws the Mandelbrot set","Help",JOptionPane.PLAIN_MESSAGE);
-			}else if(key=='g'){ //Prompts the user for a place and zoom-level to go to
+
+			} else if(key=='g'){ //Prompts the user for a place and zoom-level to go to
 				centerRe = dialogInputReCenter(); 
 				centerIm = dialogInputImCenter();
 				sidelength = dialogInputSidelength();
 				redrawAll(colors);
+
+			} else if(key=='h'){ //Display help box
+				JOptionPane.showMessageDialog(null,"Click mouse to set new center \nKeys: \n'i' - iterations - sets iterations\n'w' - where am I? - tells you the coordintes of the center\n'c' - colors - loads new color file \n'g' - go to - Enter coordinates and zoom level to go to\n'+' - zooms to double size\n'-' - zooms to half size \n'j' - draws the Julia set for the center \n'm' - draws the Mandelbrot set","Help",JOptionPane.PLAIN_MESSAGE);
 			}
-				
 		}
-			
-		
 	}
 	
-	
+
+	/**
+	 * Recalculates everything and redraws the canvas
+	 * @param colors the array containing the color values
+	 */
 	public static void redrawAll(int[][] colors){
 		initializeCanvas();
 		Complex center = new Complex(centerRe,centerIm);
@@ -181,6 +170,64 @@ public class Mandelbrot {
 		drawMandelbrot(drawingData, colors);
 	}
 	
+	/**
+	 * Initializes the canvas. After first initilization it is only used to show the message "Please wait..."
+	 */
+	public static void initializeCanvas(){
+		StdDraw.setBorder(0.001);
+		StdDraw.setCanvasSize(GRIDSIZE,GRIDSIZE);
+		StdDraw.setXscale(0,GRIDSIZE-1);
+		StdDraw.setYscale(0,GRIDSIZE-1);
+		StdDraw.setPenRadius(1.0/GRIDSIZE);
+		StdDraw.text(GRIDSIZE/2,GRIDSIZE/2, "Please wait...");
+		StdDraw.show(0);
+	}
+
+	/**
+	 * Creates an array of the complex numbers on the canvas
+	 * @param centrum
+	 */
+	public static Complex[][] createComplexGrid(Complex centrum, double sidelength){
+		Complex[][] cGrid = new Complex[GRIDSIZE][GRIDSIZE];
+		for (int i=0; i<GRIDSIZE; i++){
+			for (int j=0; j<GRIDSIZE; j++){
+				double re = centrum.getRe()-(sidelength/2)+((sidelength*i)/(GRIDSIZE-1));
+				double im = centrum.getIm()-(sidelength/2)+((sidelength*j)/(GRIDSIZE-1));
+				cGrid[i][j]= new Complex(re,im);			
+			}
+		}
+		return cGrid;
+	}
+
+	public static int[][] getDrawingData(){ //Complex complexGrid[][]
+		int[][] drawingData = new int[GRIDSIZE][GRIDSIZE];
+		for (int i=0; i<GRIDSIZE; i++){
+			for (int j=0; j<GRIDSIZE; j++){
+				drawingData[i][j]=(int)(iterate(complexGrid[i][j])/((double)maxIterations/((double)COLORDEPTH-1)));
+			}
+		}
+		return drawingData;
+	}
+
+	public static void drawMandelbrot(int drawingData[][], int colors[][]){
+		StdDraw.clear();
+		for (int i=0; i<GRIDSIZE; i++){
+			for (int j=0; j<GRIDSIZE; j++){
+				
+				if(colors!=null){
+					
+					StdDraw.setPenColor(new Color(colors[drawingData[i][j]][0], colors[drawingData[i][j]][1], colors[drawingData[i][j]][2]));
+				} else {
+					StdDraw.setPenColor(new Color(drawingData[i][j], drawingData[i][j], drawingData[i][j]));
+				}
+				StdDraw.point(i, j);
+			}
+		}
+		
+		StdDraw.show(0);
+	}
+
+
 	public static int iterate(Complex z0) {
 		Complex z = new Complex(z0);
 		if (mandelbrot){
@@ -206,6 +253,7 @@ public class Mandelbrot {
 		
 	}
 	
+
 	public static double consoleInputCheck(Scanner console){
 		while(!console.hasNextDouble()){
 			console.next();
@@ -215,59 +263,12 @@ public class Mandelbrot {
 	}
 	
 	
-	public static Complex[][] createComplexGrid(Complex centrum, double sidelength){
-		Complex[][] cGrid = new Complex[GRIDSIZE][GRIDSIZE];
-		
-		for (int i=0; i<GRIDSIZE; i++){
-			for (int j=0; j<GRIDSIZE; j++){
-				double re = centrum.getRe()-(sidelength/2)+((sidelength*i)/(GRIDSIZE-1));
-				double im = centrum.getIm()-(sidelength/2)+((sidelength*j)/(GRIDSIZE-1));
-				cGrid[i][j]= new Complex(re,im);			
-			}
-		}
-		return cGrid;
-	}
 	
-	public static int[][] getDrawingData(){ //Complex complexGrid[][]
-		
-		int[][] drawingData = new int[GRIDSIZE][GRIDSIZE];
-		for (int i=0; i<GRIDSIZE; i++){
-			for (int j=0; j<GRIDSIZE; j++){
-				drawingData[i][j]=(int)(iterate(complexGrid[i][j])/((double)maxIterations/((double)COLORDEPTH-1)));
-			}
-		}
-		return drawingData;
-	}
-	public static void initializeCanvas(){
-		//StdDraw.setBorder(0);
-		StdDraw.setCanvasSize(GRIDSIZE,GRIDSIZE);
-		StdDraw.setXscale(0,GRIDSIZE-1);
-		StdDraw.setYscale(0,GRIDSIZE-1);
-		StdDraw.setPenRadius(1.0/GRIDSIZE);
-		StdDraw.text(GRIDSIZE/2,GRIDSIZE/2, "Please wait...");
-		StdDraw.show(0);
-	}
 	
-	public static void drawMandelbrot(int drawingData[][], int colors[][]){
-		
-		StdDraw.clear();
-		
-		for (int i=0; i<GRIDSIZE; i++){
-			for (int j=0; j<GRIDSIZE; j++){
-				
-				if(colors!=null){
-					
-					StdDraw.setPenColor(new Color(colors[drawingData[i][j]][0], colors[drawingData[i][j]][1], colors[drawingData[i][j]][2]));
-				} else {
-					StdDraw.setPenColor(new Color(drawingData[i][j], drawingData[i][j], drawingData[i][j]));
-				}
-				StdDraw.point(i, j);
-			}
-		}
-		
-		StdDraw.show(0);
-		
-	}
+	
+	
+	
+	
 	
 	private static String dialogInputFilename() {
 		JFrame parent = new JFrame();
@@ -277,6 +278,17 @@ public class Mandelbrot {
 		return filename;
 	}
 	
+	private static int dialogInputIterations() {
+		JFrame parent = new JFrame();
+		String input= JOptionPane.showInputDialog(parent,maxIterations+" iterations is currently used\nPlease type a new number of iterations","Iterations",JOptionPane.OK_CANCEL_OPTION);
+		if (input == null)
+			return 0;
+		input = input.replaceAll("[^(0-9)]", "");
+		if (input.equals(""))
+			return 0;
+		return Integer.parseInt(input);
+	}
+
 	private static double dialogInputReCenter() {
 		JFrame parent = new JFrame();
 		String input= JOptionPane.showInputDialog(parent,"Enter the real coordinate of the center","New center",JOptionPane.OK_CANCEL_OPTION);
@@ -312,18 +324,13 @@ public class Mandelbrot {
 		return output;
 	}
 	
-	private static int dialogInputIterations() {
-		JFrame parent = new JFrame();
-		String input= JOptionPane.showInputDialog(parent,maxIterations+" iterations is currently used\nPlease type a new number of iterations","Iterations",JOptionPane.OK_CANCEL_OPTION);
-		if (input == null)
-			return 0;
-		input = input.replaceAll("[^(0-9)]", "");
-		if (input.equals(""))
-			return 0;
-		return Integer.parseInt(input);
-	}
-		
-	
+
+	/**
+	 * Used to open a file containing color data
+	 * @param filename The name of the file you want to open located in the "src/mnd/" directory.
+	 * @return Return a COLORDEPTH x 3 dimensional array with the color values
+	 * @throws FileNotFoundException throws this error in case the file doesn't exist.
+	 */
 	public static int[][] loadColors(String filename) throws FileNotFoundException{
 		int[][] colors = new int[COLORDEPTH][3];
 			
