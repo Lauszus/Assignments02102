@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 public class Mandelbrot {
 	
 	public static final int COLORDEPTH=256;
-	public static final int GRIDSIZE=768; //512 evt 768 eller 900 for større grid
+	public static final int GRIDSIZE=768;
 	public static final boolean CONSOLEINPUT=false;
 	
 	private static double centerRe;
@@ -146,9 +146,10 @@ public class Mandelbrot {
 				}
 
 			} else if(key=='g'){ //Prompts the user for a place and zoom-level to go to
-				centerRe = dialogInputReCenter(); 
-				centerIm = dialogInputImCenter();
-				sidelength = dialogInputSidelength();
+				
+				centerRe = dialogInputDouble("Enter the real coordinate of the center","New center"); 
+				centerIm = dialogInputDouble("Enter the imaginary coordinate of the center","New center");
+				sidelength = dialogInputDouble("Enter the sidelength","Sidelength");
 				redrawAll(colors);
 
 			} else if(key=='h'){ //Display help box
@@ -179,13 +180,14 @@ public class Mandelbrot {
 		StdDraw.setXscale(0,GRIDSIZE-1);
 		StdDraw.setYscale(0,GRIDSIZE-1);
 		StdDraw.setPenRadius(1.0/GRIDSIZE);
-		StdDraw.text(GRIDSIZE/2,GRIDSIZE/2, "Please wait...");
+		StdDraw.text(GRIDSIZE/2,GRIDSIZE/2, "Please wait..."); //"Please wait..." is shown on the canvas until the data has been calculated and drawn
 		StdDraw.show(0);
 	}
 
 	/**
 	 * Creates an array of the complex numbers on the canvas
-	 * @param centrum
+	 * @param centrum is used to make the complex grid
+	 * @param sidelength is used to make the complex grid
 	 */
 	public static Complex[][] createComplexGrid(Complex centrum, double sidelength){
 		Complex[][] cGrid = new Complex[GRIDSIZE][GRIDSIZE];
@@ -199,7 +201,11 @@ public class Mandelbrot {
 		return cGrid;
 	}
 
-	public static int[][] getDrawingData(){ //Complex complexGrid[][]
+	/**
+	 * Creates an array of the iterations for the corresponding point by iterating the points
+	 * @return returns an array of the number of iterations
+	 */
+	public static int[][] getDrawingData(){
 		int[][] drawingData = new int[GRIDSIZE][GRIDSIZE];
 		for (int i=0; i<GRIDSIZE; i++){
 			for (int j=0; j<GRIDSIZE; j++){
@@ -209,16 +215,20 @@ public class Mandelbrot {
 		return drawingData;
 	}
 
+	/**
+	 * Draws the Mandelbrot set (or Julia set)
+	 * @param drawingData an array with numbers of iterations
+	 * @param colors an array with the colors use to draw this
+	 */
 	public static void drawMandelbrot(int drawingData[][], int colors[][]){
 		StdDraw.clear();
 		for (int i=0; i<GRIDSIZE; i++){
 			for (int j=0; j<GRIDSIZE; j++){
 				
 				if(colors!=null){
-					
 					StdDraw.setPenColor(new Color(colors[drawingData[i][j]][0], colors[drawingData[i][j]][1], colors[drawingData[i][j]][2]));
 				} else {
-					StdDraw.setPenColor(new Color(drawingData[i][j], drawingData[i][j], drawingData[i][j]));
+					StdDraw.setPenColor(new Color(drawingData[i][j], drawingData[i][j], drawingData[i][j])); //Equal amounts of R, G and B gives a grayscale
 				}
 				StdDraw.point(i, j);
 			}
@@ -228,10 +238,15 @@ public class Mandelbrot {
 	}
 
 
+	/**
+	 * Iterates the complex number passed to it. 
+	 * The number can either be iterated by the Mandelbrot algorithm or the Julia algorithm
+	 * @param z0 the complex number to iterate 
+	 */
 	public static int iterate(Complex z0) {
 		Complex z = new Complex(z0);
 		if (mandelbrot){
-			//Iterates the passed complex, z, after the formula z_next = z^2 +z0
+			//Iterates the passed complex z after the formula z_next = z^2 +z0
 			for (int i = 0; i < maxIterations; i++) {
 				if (z.abs() > 2.0) {
 					return i;
@@ -241,7 +256,8 @@ public class Mandelbrot {
 			return maxIterations;
 			
 		} else {
-			//Iterates the passed complex, z, after the formula z_next = z^2 + c
+			//Iterates the passed complex z after the formula z_next = z^2 + c
+			//c is the complex number for which the Julia set is found
 			for (int i = 0; i < maxIterations; i++) {
 				if (z.abs() > 2.0) {
 					return i;
@@ -250,26 +266,13 @@ public class Mandelbrot {
 			}
 			return maxIterations;
 		}
-		
-	}
-	
-
-	public static double consoleInputCheck(Scanner console){
-		while(!console.hasNextDouble()){
-			console.next();
-			System.out.println("Invalid input! Try again: ");
-		}
-		return console.nextDouble();
 	}
 	
 	
 	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Prompts the user for a filename for the color file
+	 */	
 	private static String dialogInputFilename() {
 		JFrame parent = new JFrame();
 		String filename = JOptionPane.showInputDialog(parent,"Please write filename (in directory src" + File.separator + "mnd" + File.separator +" )","Filename",JOptionPane.OK_CANCEL_OPTION);
@@ -278,48 +281,51 @@ public class Mandelbrot {
 		return filename;
 	}
 	
+	/**
+	 * Prompts the user for a new value for iterations
+	 * @return Returns an integer typed by the user. 
+	 */	
 	private static int dialogInputIterations() {
 		JFrame parent = new JFrame();
 		String input= JOptionPane.showInputDialog(parent,maxIterations+" iterations is currently used\nPlease type a new number of iterations","Iterations",JOptionPane.OK_CANCEL_OPTION);
 		if (input == null)
 			return 0;
-		input = input.replaceAll("[^(0-9)]", "");
+		input = input.replaceAll("[^(0-9)]", ""); //Uses a regular expression to remove alle non-numerical characters from the input
 		if (input.equals(""))
 			return 0;
 		return Integer.parseInt(input);
 	}
 
-	private static double dialogInputReCenter() {
+	/**
+	 * Prompts the user for a new value for iterations
+	 * @param message What the user is told to type
+	 * @param title The title of the inputdialog
+	 * @return Returns a double typed by the user. 
+	 */	
+	private static double dialogInputDouble(String message, String title) {
 		JFrame parent = new JFrame();
-		String input= JOptionPane.showInputDialog(parent,"Enter the real coordinate of the center","New center",JOptionPane.OK_CANCEL_OPTION);
+		String input= JOptionPane.showInputDialog(parent,message,title,JOptionPane.OK_CANCEL_OPTION);
 		return doubleFromString(input);
 	}
 	
-	private static double dialogInputImCenter() {
-		JFrame parent = new JFrame();
-		String input= JOptionPane.showInputDialog(parent," Enter the imaginary coordinate of the center","New center",JOptionPane.OK_CANCEL_OPTION);
-		return doubleFromString(input);
-	}
-	
-	private static double dialogInputSidelength() {
-		JFrame parent = new JFrame();
-		String input= JOptionPane.showInputDialog(parent,"Enter the sidelength","Sidelength",JOptionPane.OK_CANCEL_OPTION);
-		return doubleFromString(input);
-	}
-	
+	/**
+	 * Finds a double in a string if a such exists. If not, 0 is returned
+	 * @param input String to find a double in
+	 * @return Returns a double found in the string passed. Returns 0 if the input is invalid 
+	 */	
 	private static double doubleFromString(String input){
 		if (input == null)
 			return 0;
-		input = input.replaceAll(",", ".");
-		input = input.replaceAll("[^(0-9)][,|-]", "");
+		input = input.replaceAll(",", "."); //Regex replacing ","" with the proper decimal point
+		input = input.replaceAll("[^(0-9)][.|-]", ""); //Regex removing everything that can not be parsed to a double
 		if (input.equals(""))
 			return 0;
 		double output;
 		try{
-			output=Double.parseDouble(input);
+			output=Double.parseDouble(input); 
 		} catch(NumberFormatException e) {
 			JOptionPane.showMessageDialog(null,"Invalid input. 0.0 is used.","Not a valid number!",JOptionPane.WARNING_MESSAGE);
-			return 0;
+			return 0; //Returning 0 if the string can not be parsed to a double (eg. it has more than one decimal point)
 		}
 		return output;
 	}
@@ -347,7 +353,7 @@ public class Mandelbrot {
 		}
 		
 		Scanner fileScanner = new Scanner(colorFile);
-		
+		//The following code assumes a properly formatted color file
 		for (int i=0; i<COLORDEPTH; i++){
 			for (int j=0; j<3; j++){
 				if (fileScanner.hasNextInt()){
@@ -359,4 +365,18 @@ public class Mandelbrot {
 		
 		return colors;
 	}
+
+
+	/**
+	 * Checks if the console input is a double
+	 * @param console the scanner-object to check for a double
+	 */
+	public static double consoleInputCheck(Scanner console){
+		while(!console.hasNextDouble()){
+			console.next();
+			System.out.println("Invalid input! Try again: ");
+		}
+		return console.nextDouble();
+	}
+
 }
