@@ -37,6 +37,15 @@ public class Artikel {
 	 * Used to print all the information of the article.
 	 */
 	public String toString() {
+		return toString(true);
+	}
+	
+	/**
+	 * Similar to toString(), but it's possible to set if you want the reference list as well.
+	 * @param getReferences Set this to true to print the reference list.
+	 * @return Return the string with all the information regarding the article.
+	 */
+	public String toString(boolean getReferences) {
 		String output = "";
 		int size = forfattere.size();
 		for(String forfatter : forfattere) {
@@ -50,10 +59,10 @@ public class Artikel {
 		output += ": \"" + titel + "\". ";
 		output += tidsskrift;
 		
-		if(!referenceliste.isEmpty()) {
+		if(getReferences && !referenceliste.isEmpty()) { // Print the reference list
 			output += "\nReference List: ";
 			for(Artikel artikel : referenceliste) {
-				output += artikel;
+				output += artikel.toString(false);
 				output += " ";
 			}
 			output += "\n";

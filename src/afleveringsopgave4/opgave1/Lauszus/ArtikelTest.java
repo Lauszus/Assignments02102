@@ -30,9 +30,13 @@ public class ArtikelTest {
 		forfattereB.add("Bim");
 		Artikel B = new Artikel(forfattereB, "B", brain); // Create a new article instance
 		
-		List<Artikel> referenceliste = new ArrayList<Artikel>(); // Set a reference list
-		referenceliste.add(B); // Add B to the reference list
-		A.setReferenceliste(referenceliste);
+		List<Artikel> referencelisteA = new ArrayList<Artikel>(); // Set a reference list
+		referencelisteA.add(B); // Add B to the reference list
+		A.setReferenceliste(referencelisteA);
+		
+		List<Artikel> referencelisteB = new ArrayList<Artikel>(); // Set a reference list
+		referencelisteB.add(A); // Add A to the reference list
+		B.setReferenceliste(referencelisteB);
 		
 		System.out.println(A); // Print information about the two articles
 		System.out.println(B);
