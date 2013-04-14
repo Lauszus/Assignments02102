@@ -29,17 +29,18 @@ public class GameOfLifeMain {
 	 * @throws FileNotFoundException Called when the requested initial file doesn't exist.
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		JFileChooser chooser = new JFileChooser(new File(System.getProperty("user.dir")));
+		JFileChooser chooser = new JFileChooser(new File(System.getProperty("user.dir"))); // Create the FileChooser instance 
 	    int returnVal = chooser.showOpenDialog(null);
-	    if(returnVal != JFileChooser.APPROVE_OPTION)
-	    	return;
 	    
-		GameOfLife gol = new GameOfLife(openMatrix(chooser.getSelectedFile().getPath())); // Read the initial state from a file
+	    GameOfLife gol;
+	    if(returnVal != JFileChooser.APPROVE_OPTION)
+	    	gol = new GameOfLife(gridSize); // Create random game if the user dismiss the dialog
+	    else
+	    	gol = new GameOfLife(openMatrix(chooser.getSelectedFile().getPath())); // Read the initial state from a file
 		System.out.println(gol); // Print the state as a matrix
 		
 		/*GameOfLife gol = new GameOfLife(initialState); // Use the array above to set the initial state
 		gridSize = initialState[0].length;*/
-		//GameOfLife gol = new GameOfLife(gridSize); // Create random game
 		
 		StdDraw.setCanvasSize(700, 700); // Adjust the size of the window
 		StdDraw.setBorder(0.10); // We added this function ourself in order to adjust the border size
