@@ -30,13 +30,13 @@ public class GameOfLifeMain {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 		JFileChooser chooser = new JFileChooser(new File(System.getProperty("user.dir"))); // Create the FileChooser instance 
-	    int returnVal = chooser.showOpenDialog(null);
-	    
-	    GameOfLife gol;
-	    if(returnVal != JFileChooser.APPROVE_OPTION)
-	    	gol = new GameOfLife(gridSize); // Create random game if the user dismiss the dialog
-	    else
-	    	gol = new GameOfLife(openMatrix(chooser.getSelectedFile().getPath())); // Read the initial state from a file
+		int returnVal = chooser.showOpenDialog(null);
+		
+		GameOfLife gol;
+		if(returnVal != JFileChooser.APPROVE_OPTION)
+			gol = new GameOfLife(gridSize); // Create random game if the user dismiss the dialog
+		else
+			gol = new GameOfLife(openMatrix(chooser.getSelectedFile().getPath())); // Read the initial state from a file
 		System.out.println(gol); // Print the state as a matrix
 		
 		/*GameOfLife gol = new GameOfLife(initialState); // Use the array above to set the initial state
