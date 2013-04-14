@@ -1,11 +1,6 @@
 package afleveringsopgave4.opgave1.Simon;
-import java.util.Arrays;
-
-
 
 public class Opg1 {
-
-
 	public static void main(String[] args) {
 		Forlag f = new Forlag("University Press", "Denmark");
 		System.out.println(f.toString());
@@ -28,5 +23,4 @@ public class Opg1 {
 		System.out.println(A.toString());
 	
 	}
-
 }

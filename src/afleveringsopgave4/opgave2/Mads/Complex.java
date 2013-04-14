@@ -1,4 +1,4 @@
-package Mads;
+package afleveringsopgave4.opgave2.Mads;
 
 public class Complex {
 	private double re;

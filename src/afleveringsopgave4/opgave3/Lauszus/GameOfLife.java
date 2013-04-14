@@ -29,7 +29,7 @@ public class GameOfLife {
 	 * @param initialState A n x n array containing the initial state.   
 	 */
 	public GameOfLife(int[][] initialState) {
-		gridSize = initialState[0].length; // We will assume that it's symmetrical 
+		gridSize = initialState[0].length; // We will assume that it's square 
 		state = initialState.clone();
 	}
 	
