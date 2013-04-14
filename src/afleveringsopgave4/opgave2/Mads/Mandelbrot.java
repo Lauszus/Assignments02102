@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 /**
  * This is the main Mandelbrot class. This will open a window and draw the Mandelbrot set. 
+ * When running the program, press "h" for help
  * @author Simon Patrzalek, Mads Bornebusch and Kristian Lauszus.
  */
 
@@ -89,7 +90,6 @@ public class Mandelbrot {
 				}
 				
 			}
-			
 			if (StdDraw.hasNextKeyTyped()){
 				key = Character.toLowerCase(StdDraw.nextKeyTyped());
 			}
