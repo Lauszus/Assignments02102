@@ -64,7 +64,7 @@ public class GameOfLifeMain {
 	
 	/**
 	 * Used to open a file containing a n x n dimensional array with an initial state.
-	 * @param filepath The name of the file you want to open located in the "src/afleveringsopgave4/Files/gol" directory.
+	 * @param filepath The path to the file you want to open.
 	 * @return Return a n x n dimensional array with all the values in the matrix.
 	 * @throws FileNotFoundException Throws this error in case the file doesn't exist.
 	 */
@@ -76,7 +76,7 @@ public class GameOfLifeMain {
 			list.add(fileScanner.nextInt());
 		
 		gridSize = (int)Math.sqrt(list.toArray().length);
-		int[][] matrix = new int[gridSize][gridSize]; // We assume that it's a n x n matrix
+		int[][] matrix = new int[gridSize][gridSize]; // We assume that it's a square matrix
 		
 		int index = 0;
 		for(int y = 0; y < gridSize; y++) {
