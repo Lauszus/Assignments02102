@@ -2,11 +2,10 @@ package afleveringsopgave4.opgave3.Simon;
 import java.util.*;
 
 public class GameOfLife {
-	int m;
-	int[][] life = new int[m][m];
+	int[][] life;
 
 	public GameOfLife(int n){
-		m= n;
+		life = new int[n][n];
 		Random r = new Random();
 
 		for(int i= 0; i<n; i++){
@@ -15,7 +14,14 @@ public class GameOfLife {
 			}
 		}
 	}
+	
 	public GameOfLife(int[][] initialState){
 		life= initialState;
 	}
-}
+	public int[][] toArray(){
+			return life;
+		}
+		
+	}
+	
+
