@@ -11,7 +11,7 @@ int pop(my_stack * stack_p) {
 }
 void push(my_stack * stack_p, int value) {
 	if (stack_p->size >= stack_p->capacity) { // It's already full
-		stack_p->capacity = stack_p->capacity*2;
+		stack_p->capacity *= 2;
 		stack_p->array = (int*)realloc(stack_p->array, stack_p->capacity*sizeof(int));
 	}	
 	stack_p->array[stack_p->size] = value;
