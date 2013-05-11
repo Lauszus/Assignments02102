@@ -27,20 +27,34 @@ int main() {
 	puts("Welcome to CUDB - The C University Data Base\n");
 	puts("0: Halt\n1: List all students\n2: Add a new student");
 
-	student_t * students = NULL;
-	int i, temp, action = -1, studentsSize = 0;
+	int i, temp, studentsSize = 0;
+	student_t * students = (student_t*)malloc(sizeof(student_t));
+
+	FILE * file = fopen("database.txt","r"); // Read from a file
+	if (file != NULL) {
+		puts("Reading students from database");
+		while (fscanf(file,"%s %d\n", (students+studentsSize)->name, &(students+studentsSize)->data) != -1) {
+			studentsSize++;
+			students = (student_t*)realloc(students, sizeof(student_t)*(studentsSize+1));
+		}
+		fclose(file);
+		
+		if (studentsSize > 0) {
+			puts("\nExisting students from database:");
+			for (i = 0; i < studentsSize; i++)
+				printStudent(i,students+i);
+		}
+	}
 
 	while(1) {
-		students = (student_t*)realloc(students,sizeof(student_t)*(studentsSize+1));
-
 		puts("\nEnter action:");
 		fflush(stdout);
-		scanf("%d", &action);
+		scanf("%d", &temp);
 		fflush(stdin);
 
-		if (action == 0)
+		if (temp == 0)
 			break;
-		else if (action == 1) {
+		else if (temp == 1) {
 			if (studentsSize > 0) {
 				printf("\n");
 				for (i = 0; i < studentsSize; i++)
@@ -70,6 +84,19 @@ int main() {
 			(students+studentsSize)->data |= (temp & 0xFF) << 6;
 
 			studentsSize++;
+			students = (student_t*)realloc(students, sizeof(student_t)*(studentsSize+1));
+		}
+	}	
+
+	if (studentsSize > 0) {
+		file = fopen("database.txt","w");
+		if (file == NULL)
+			puts("Error opening file!");
+		else {
+			puts("Writing students to database");
+			for (i = 0; i < studentsSize; i++)
+				fprintf(file,"%s %d\n", (students+i)->name, (students+i)->data);
+			fclose(file);
 		}
 	}
 
