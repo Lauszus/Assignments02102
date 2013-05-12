@@ -25,13 +25,13 @@ public class GameOfLifeMain {
 				}
 			}
 		}
-		
+
 		//int[][] a=  nextState(game.toArray());
 		for( int k = 1; k <500; k++  ){
-			StdDraw.show(0);
+			StdDraw.show(50);
 			StdDraw.clear();
 			int[] [] a = nextState(game.toArray());
-		
+
 			for(int i = 0; i<n; i++){
 				for(int j = 0; j<n; j++){
 					if(a[i][j]==1){
@@ -39,34 +39,35 @@ public class GameOfLifeMain {
 					}
 				}
 			}
-			StdDraw.show(0);
-			
+			StdDraw.show(50);
+
 		}
 	}
 	public static int[] [] nextState(int [] [] currentCells){
-
+		int [][] nextState = new int[n][n];
 		for(int i = 0; i<n; i++){
 			for(int j = 0; j<n; j++){
+
 				int neighbourcells = 0;
 				neighbourcells = currentCells[i+1][j] + currentCells[i+1][j+1]+ currentCells[i+1][j-1]+ currentCells[i][j-1]+ currentCells[i-1][j-1]+ currentCells[i-1][j]+ currentCells[i-1][j+1]+ currentCells[i][j+1];
 				if(currentCells[i][j]==1){
 					if(neighbourcells < 2 ){
-						currentCells[i][j]=0;
+						nextState[i][j]=0;
 					} else if(neighbourcells > 3){
-						currentCells[i][j]=0;
+						nextState[i][j]=0;
 					}else if(neighbourcells == 2 || neighbourcells == 3 ){
 
 					}
 				}
 				else{ 
 					if(neighbourcells == 3){
-						currentCells[i][j]=1;
+						nextState[i][j]=1;
 					}
 
 				}
 
 			}
 		}
-		return currentCells;
+		return nextState;
 	}
 }
