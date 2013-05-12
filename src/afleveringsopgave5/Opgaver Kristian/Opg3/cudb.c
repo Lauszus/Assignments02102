@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define NAME_SIZE 5
 
@@ -61,25 +62,33 @@ int main() {
 					printStudent(i,students+i);
 			}
 		} else {
-			puts("\nEnter name (4 characters only):");
-			fflush(stdout);
-			scanf("%s", (students+studentsSize)->name);
+			do {
+				puts("\nEnter name (4 characters only):");
+				fflush(stdout);
+				scanf("%s", (students+studentsSize)->name);
+			} while(strlen((students+studentsSize)->name) < 1 || strlen((students+studentsSize)->name) > 4);
 
-			puts("\nEnter start year (2009-2040):");			
-			fflush(stdout);
-			scanf("%d", &temp);
+			do {
+				puts("\nEnter start year (2009-2040):");
+				fflush(stdout);
+				scanf("%d", &temp);
+			} while(temp < 2009 || temp > 2040);
 
 			(students+studentsSize)->data = (temp-2009) & 0x1F;
 
-			puts("\nEnter start semester (0=Autumn/1=Spring):");			
-			fflush(stdout);
-			scanf("%d", &temp);
+			do {
+				puts("\nEnter start semester (0=Autumn/1=Spring):");
+				fflush(stdout);
+				scanf("%d", &temp);
+			} while(temp < 0 || temp > 1);
 
 			(students+studentsSize)->data |= (temp & 0x1) << 5;
 
-			puts("\nEnter GPA (0-255):");
-			fflush(stdout);
-			scanf("%d", &temp);
+			do {
+				puts("\nEnter GPA (0-255):");
+				fflush(stdout);
+				scanf("%d", &temp);
+			} while(temp < 0 || temp > 255);
 
 			(students+studentsSize)->data |= (temp & 0xFF) << 6;
 
