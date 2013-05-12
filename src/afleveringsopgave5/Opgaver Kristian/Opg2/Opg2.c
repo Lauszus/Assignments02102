@@ -16,5 +16,6 @@ int main() {
 		value = pop(myStack);
 		printf("popped: %d\n", value);
 	}
+	free(myStack);
 	return 0;
 }
