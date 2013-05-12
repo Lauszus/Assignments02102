@@ -15,7 +15,7 @@ popped: 123
 top: -1
 */
 int main() {
-	my_stack * myStack = newStack();
+	stack_t2 * myStack = newStack();
 	if (empty(myStack))
 		printf("Stack is empty\n");
 	else
@@ -32,7 +32,7 @@ int main() {
 		value = pop(myStack);
 		printf("popped: %d\n", value);
 	}
-	printf("top: %d", top(myStack));
+	printf("top: %d\n", top(myStack));
 	free(myStack);
 	return 0;
 }
