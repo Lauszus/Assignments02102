@@ -62,11 +62,10 @@ int main() {
 					printStudent(i,students+i);
 			}
 		} else {
-			do {
-				puts("\nEnter name (4 characters only):");
-				fflush(stdout);
-				scanf("%s", (students+studentsSize)->name);
-			} while(strlen((students+studentsSize)->name) < 1 || strlen((students+studentsSize)->name) > 4);
+			puts("\nEnter name (4 characters only):");
+			fflush(stdout);
+			scanf("%4s", (students+studentsSize)->name);
+			while(getchar() != '\n');
 
 			do {
 				puts("\nEnter start year (2009-2040):");
