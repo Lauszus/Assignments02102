@@ -14,24 +14,22 @@ stack_t * newStack(void){
 	stack_t* new =malloc(sizeof(stack_t));
 	new->size = 0;
 	new->capacity=1;
+	new->array = malloc(sizeof(int));
 	return new;
 }
 
 int pop(stack_t * stack_p){
 	stack_p->size--;
-	return stack_p->array[stack_p->size--;];;
+	return stack_p->array[stack_p->size];
 }
 
 void push(stack_t * stack_p, int value){
 	stack_p->size++;
-	if((*stack_p->size) > (*stack_p->capacity)){
-		stack_p = realloc(stack_p, sizeof (stack_t->array[]*2)+sizeof (int)*2);
+	if(stack_p->size > stack_p->capacity){
 		stack_p->capacity *=2;
+		stack_p = realloc(stack_p->array, sizeof(int)*stack_p->capacity);
 	}
-
 	stack_p->array[stack_p->size-1] = value;
-
-
 }
 
 int top(stack_t * stack_p){
