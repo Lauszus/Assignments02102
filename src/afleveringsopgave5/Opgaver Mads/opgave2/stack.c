@@ -11,7 +11,7 @@ Tilføj funktionerne newStack, pop, push, top og empty.
 */
 
 stack_t * newStack(void){
-	stack_t* new =malloc(sizeof(stack_t));
+	stack_t* new = malloc(sizeof(stack_t));
 	new->size = 0;
 	new->capacity=1;
 	new->array = malloc(sizeof(int));
@@ -27,7 +27,7 @@ void push(stack_t * stack_p, int value){
 	stack_p->size++;
 	if(stack_p->size > stack_p->capacity){
 		stack_p->capacity *=2;
-		stack_p = realloc(stack_p->array, sizeof(int)*stack_p->capacity);
+		stack_p->array = realloc(stack_p->array, sizeof(int)*stack_p->capacity);
 	}
 	stack_p->array[stack_p->size-1] = value;
 }
