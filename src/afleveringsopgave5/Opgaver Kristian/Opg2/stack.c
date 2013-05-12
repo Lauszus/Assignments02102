@@ -32,7 +32,5 @@ my_stack * newStack(void) {
 	return stack_p;
 }
 int empty(my_stack * stack_p) {
-	if (stack_p->size > 0)
-		return 0;
-	return 1;
+	return (stack_p->size == 0);
 }
