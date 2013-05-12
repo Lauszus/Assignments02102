@@ -49,9 +49,7 @@ int main() {
 
 	while(1) {
 		puts("\nEnter action:");
-		fflush(stdout);
 		scanf("%d", &temp);
-		fflush(stdin);
 
 		if (temp == 0)
 			break;
@@ -63,13 +61,11 @@ int main() {
 			}
 		} else {
 			puts("\nEnter name (4 characters only):");
-			fflush(stdout);
 			scanf("%4s", (students+studentsSize)->name);
 			while(getchar() != '\n');
 
 			do {
 				puts("\nEnter start year (2009-2040):");
-				fflush(stdout);
 				scanf("%d", &temp);
 			} while(temp < 2009 || temp > 2040);
 
@@ -77,7 +73,6 @@ int main() {
 
 			do {
 				puts("\nEnter start semester (0=Autumn/1=Spring):");
-				fflush(stdout);
 				scanf("%d", &temp);
 			} while(temp < 0 || temp > 1);
 
@@ -85,7 +80,6 @@ int main() {
 
 			do {
 				puts("\nEnter GPA (0-255):");
-				fflush(stdout);
 				scanf("%d", &temp);
 			} while(temp < 0 || temp > 255);
 
