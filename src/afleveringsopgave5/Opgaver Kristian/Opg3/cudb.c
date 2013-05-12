@@ -15,13 +15,18 @@ Bit 5: Startsemester (0 for efterår og 1 for forår).
 Bit 6–13: Karaktersnit (255 er naturligvis den bedste karakter).
 */
 
-void printStudent(int number, student_t * student) {
-	printf("s%04d: %s %d ", number, student->name, (student->data & 0x1F) + 2009);
-	if (student->data & 0x20)
-		printf("Spring");
-	else
-		printf("Autumn");
-	printf(" %d\n", (student->data >> 6) & 0xFF);
+void printStudents(student_t * students, int size) {
+	int i, avg = 0;
+	for (i = 0; i < size; i++) {
+		printf("s%04d: %s %d ", i, (students+i)->name, ((students+i)->data & 0x1F) + 2009);
+		if ((students+i)->data & 0x20)
+			printf("Spring");
+		else
+			printf("Autumn");
+		printf(" %d\n", ((students+i)->data >> 6) & 0xFF);
+		avg += ((students+i)->data >> 6) & 0xFF;
+	}
+	printf("\nAverage GPA = %.2f\n", (double)avg/(double)size);
 }
 
 int main() {
@@ -42,12 +47,7 @@ int main() {
 		
 		if (studentsSize > 0) {
 			puts("\nExisting students from database:");
-			temp = 0;
-			for (i = 0; i < studentsSize; i++) {
-				printStudent(i,students+i);
-				temp += ((students+i)->data >> 6) & 0xFF;
-			}
-			printf("\nAverage GPA = %.2f\n", (double)temp/(double)studentsSize);
+			printStudents(students,studentsSize);
 		}
 	}
 
@@ -60,12 +60,7 @@ int main() {
 		else if (temp == 1) {
 			if (studentsSize > 0) {
 				printf("\n");
-				temp = 0;
-				for (i = 0; i < studentsSize; i++) {
-					printStudent(i,students+i);
-					temp += ((students+i)->data >> 6) & 0xFF;
-				}
-				printf("\nAverage GPA = %.2f\n", (double)temp/(double)studentsSize);
+				printStudents(students,studentsSize);
 			}
 		} else {
 			puts("\nEnter name (4 characters only):");
