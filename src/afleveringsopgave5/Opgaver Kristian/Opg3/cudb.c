@@ -42,8 +42,12 @@ int main() {
 		
 		if (studentsSize > 0) {
 			puts("\nExisting students from database:");
-			for (i = 0; i < studentsSize; i++)
+			temp = 0;
+			for (i = 0; i < studentsSize; i++) {
 				printStudent(i,students+i);
+				temp += ((students+i)->data >> 6) & 0xFF;
+			}
+			printf("\nAverage GPA = %.2f\n", (double)temp/(double)studentsSize);
 		}
 	}
 
@@ -56,8 +60,12 @@ int main() {
 		else if (temp == 1) {
 			if (studentsSize > 0) {
 				printf("\n");
-				for (i = 0; i < studentsSize; i++)
+				temp = 0;
+				for (i = 0; i < studentsSize; i++) {
 					printStudent(i,students+i);
+					temp += ((students+i)->data >> 6) & 0xFF;
+				}
+				printf("\nAverage GPA = %.2f\n", (double)temp/(double)studentsSize);
 			}
 		} else {
 			puts("\nEnter name (4 characters only):");
