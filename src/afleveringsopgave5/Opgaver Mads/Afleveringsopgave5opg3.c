@@ -35,28 +35,29 @@ int dataconvert(int d, int startVal, int bits){
 }
 
 
-int listAll(student_t *database_p[], int currentSize){
+int listAll(student_t *database_p, int currentSize){
 	int i, year, gpa,d;
 	char semester[7];
 
 	for(i=0; i<currentSize; i++){
-		d=(*database_p[i]).data;
+		d = database_p->data;
 		year = dataconvert(d, 1, 5);
 
 		if ((dataconvert(d, 32, 1))==0){
-			strncpy(semester, "Autumn",6);
+			strcpy(semester, "Autumn");
 		}else
-			strncpy(semester, "Spring",6);
-		semester[6]='\0';
+			strcpy(semester, "Spring");
 
 		gpa = dataconvert(d, 64 , 8);
 
-		printf("s%04d %s %d %s %03d\n", i, (*database_p[i]).name, 2009+year, semester, gpa);
+		printf("s%04d %s %d %s %03d\n", i, database_p->name, 2009+year, semester, gpa);
+
+		database_p++;
 	}
 	return 0;
 }
 
-int newStudent(student_t *database_p[], int currentSize){
+int newStudent(student_t *database_p, int currentSize){
 	char name[NAME_SIZE];
 
 	int year=2041;
@@ -85,8 +86,8 @@ int newStudent(student_t *database_p[], int currentSize){
 		scanf("%d", &gpa);
 	}
 
-	strncpy((*database_p[currentSize]).name, name, NAME_SIZE);
-	(*database_p[currentSize]).data = (year-2009)+(32*semester) + (64*gpa);
+	strncpy(database_p[currentSize].name, name, NAME_SIZE);
+	database_p[currentSize].data = (year-2009)+(32*semester) + (64*gpa);
 	//2^5*startsemester og 2^6*karakter fordi disse data starter på 5.og 6. bit
 
 	return 0;
@@ -94,9 +95,9 @@ int newStudent(student_t *database_p[], int currentSize){
 
 int main() {
 	int cmd;
-	student_t *database_p;
-	database_p = calloc(DB_SIZE, sizeof (student_t));
-	int currentSize=1;
+	student_t *database_p = (student_t*)malloc(sizeof (student_t));
+	database_p = (student_t*)realloc(database_p, sizeof(student_t)*DB_SIZE);
+	int currentSize=0;
 
 	puts("Welcome to CUDB - The C University Data Base");
 	printf("\n0: Halt \n1: List all students\n2: Add a new student");
@@ -107,13 +108,12 @@ int main() {
 		scanf("%d", &cmd);
 
 		if(cmd==1){
-			listAll(&database_p, currentSize);
+			listAll(database_p, currentSize);
 			cmd=3;
 		}else if(cmd==2){
-			printf("currsz=%d\n", currentSize);
-			newStudent(&database_p, currentSize);
+
+			newStudent(database_p, currentSize);
 			currentSize++;
-			printf("currsz=%d\n", currentSize);
 			cmd=3;
 		}
 
