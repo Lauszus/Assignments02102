@@ -67,6 +67,7 @@ int main() {
 			do {
 				puts("\nEnter start year (2009-2040):");
 				scanf("%d", &temp);
+				while(getchar() != '\n');
 			} while(temp < 2009 || temp > 2040);
 
 			(students+studentsSize)->data = (temp-2009) & 0x1F;
@@ -74,6 +75,7 @@ int main() {
 			do {
 				puts("\nEnter start semester (0=Autumn/1=Spring):");
 				scanf("%d", &temp);
+				while(getchar() != '\n');
 			} while(temp < 0 || temp > 1);
 
 			(students+studentsSize)->data |= (temp & 0x1) << 5;
@@ -81,6 +83,7 @@ int main() {
 			do {
 				puts("\nEnter GPA (0-255):");
 				scanf("%d", &temp);
+				while(getchar() != '\n');
 			} while(temp < 0 || temp > 255);
 
 			(students+studentsSize)->data |= (temp & 0xFF) << 6;
