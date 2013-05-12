@@ -12,6 +12,7 @@ Three values have been pushed
 popped: 4444
 popped: 99
 popped: 123
+top: -1
 */
 int main() {
 	my_stack * myStack = newStack();
@@ -31,6 +32,7 @@ int main() {
 		value = pop(myStack);
 		printf("popped: %d\n", value);
 	}
+	printf("top: %d", top(myStack));
 	free(myStack);
 	return 0;
 }
