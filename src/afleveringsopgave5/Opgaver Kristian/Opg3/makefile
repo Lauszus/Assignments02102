@@ -1,17 +1,9 @@
-TARGET = cudb
 CC = gcc
 CFLAGS = -O -Wall
+TARGET = cudb
 
-OBJS = $(TARGET).o
-
-$(TARGET): ${OBJS}
-	${CC} -o $(TARGET) ${CFLAGS} ${OBJS}
-
-$(TARGET).o: $(TARGET).c
-	${CC} ${CFLAGS} -c $(TARGET).c
-
+all: $(TARGET)
 clean:
-	rm -f $(TARGET) ${OBJS}
-
-run: $(TARGET)
+	rm -f $(TARGET)
+run: all
 	./$(TARGET)
